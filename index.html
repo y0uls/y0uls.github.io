@@ -10,22 +10,39 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 </head>
 <body>
+
+    <!-- ===================== NAV ===================== -->
     <nav>
         <div class="nav-logo">y0uls<span class="cursor">_</span></div>
         <ul>
             <li><a href="#projects">Projets</a></li>
+            <li><a href="#homelab">Homelab</a></li>
             <li><a href="#stack">Stack</a></li>
             <li><a href="#contact">Contact</a></li>
         </ul>
+        <!-- [2] Badge self-hosting -->
+        <div class="selfhosting-badge">
+            <span class="badge-dot"></span>
+            <span class="badge-text">Self-hosting: IRC · Tor · uptime <span id="uptime-count">847</span>d</span>
+        </div>
     </nav>
 
+    <!-- ===================== HERO ===================== -->
     <section class="hero">
         <div class="hero-grid"></div>
         <div class="hero-inner">
-            <div class="terminal-line">
-                <span class="prompt">~/y0uls</span>
-                <span class="caret">$</span>
+
+            <!-- [1] Vrai terminal interactif -->
+            <div class="terminal-block">
+                <div class="terminal-titlebar">
+                    <span class="tb-dot tb-red"></span>
+                    <span class="tb-dot tb-yellow"></span>
+                    <span class="tb-dot tb-green"></span>
+                    <span class="tb-title">y0uls — bash</span>
+                </div>
+                <div class="terminal-body" id="terminal-body"></div>
             </div>
+
             <h1>Sysadmin & builder<br><span class="accent">self-hosted everything.</span></h1>
             <p class="hero-sub">
                 IT admin le jour, dev de side-projects la nuit. Infrastructure Windows/Linux, outils Node.js, et trop de Docker Compose.
@@ -37,40 +54,58 @@
         </div>
     </section>
 
+    <!-- ===================== GITHUB STATS ===================== -->
+    <!-- [6] Compteur GitHub API -->
+    <div class="gh-stats-bar">
+        <div class="gh-stats-inner" id="gh-stats">
+            <span class="gh-stat-item gh-loading">
+                <span class="gh-spinner"></span> Chargement stats GitHub…
+            </span>
+        </div>
+    </div>
+
+    <!-- ===================== PROJECTS ===================== -->
     <section id="projects">
         <div class="section-header">
             <span class="eyebrow">// projets récents</span>
             <h2>Ce que je construis</h2>
         </div>
+
+        <!-- [4] Filtres par tag -->
+        <div class="filter-bar">
+            <button class="filter-btn active" data-filter="all">Tous</button>
+            <button class="filter-btn" data-filter="Gaming">Gaming</button>
+            <button class="filter-btn" data-filter="Infrastructure">Infrastructure</button>
+            <button class="filter-btn" data-filter="IoT">IoT</button>
+            <button class="filter-btn" data-filter="Python">Python</button>
+            <button class="filter-btn" data-filter="Docker">Docker</button>
+        </div>
+
         <div class="projects-grid">
-            <!-- irc-improved -->
-            <div class="card card-featured">
+            <div class="card card-featured" data-tags="Docker,Infrastructure,IRC,Tor,Windows">
                 <div class="card-meta">
                     <span class="tag">Docker</span>
                     <span class="tag">IRC</span>
                     <span class="tag">Tor</span>
-                    <span class="tag">Windows</span>
+                    <span class="tag">Infrastructure</span>
                 </div>
                 <h3>irc-improved</h3>
                 <p>Serveur IRC privé accessible via un hidden service Tor, avec interface web The Lounge intégrée et package client Windows clé en main.</p>
                 <a href="https://github.com/y0uls/irc-improved" class="card-link">Voir le repo →</a>
             </div>
 
-            <!-- DebianWSL-XMRig -->
-            <div class="card">
+            <div class="card" data-tags="PowerShell,WSL,Mining,Debian,Infrastructure">
                 <div class="card-meta">
                     <span class="tag">PowerShell</span>
                     <span class="tag">WSL</span>
-                    <span class="tag">Mining</span>
-                    <span class="tag">Debian</span>
+                    <span class="tag">Infrastructure</span>
                 </div>
                 <h3>DebianWSL-XMRig</h3>
                 <p>Script PowerShell pour installer Debian sous WSL avec XMRig. Compilation, service systemd automatique, console interactive.</p>
                 <a href="https://github.com/y0uls/DebianWSL-XMRig" class="card-link">Voir le repo →</a>
             </div>
 
-            <!-- keyboard_mouse_to_xinput -->
-            <div class="card">
+            <div class="card" data-tags="Python,Gaming,XInput">
                 <div class="card-meta">
                     <span class="tag">Python</span>
                     <span class="tag">Gaming</span>
@@ -81,11 +116,9 @@
                 <a href="https://github.com/y0uls/keyboard_mouse_to_xinput" class="card-link">Voir le repo →</a>
             </div>
 
-            <!-- space-warfare -->
-            <div class="card">
+            <div class="card" data-tags="JavaScript,HTML5,Node.js,Gaming">
                 <div class="card-meta">
                     <span class="tag">JavaScript</span>
-                    <span class="tag">HTML5</span>
                     <span class="tag">Node.js</span>
                     <span class="tag">Gaming</span>
                 </div>
@@ -94,8 +127,7 @@
                 <a href="https://github.com/y0uls/space-warfare" class="card-link">Voir le repo →</a>
             </div>
 
-            <!-- Ultimate_Duke_Nukem_3D_Custom_Launcher -->
-            <div class="card">
+            <div class="card" data-tags="VB.NET,Inno Setup,Gaming">
                 <div class="card-meta">
                     <span class="tag">VB.NET</span>
                     <span class="tag">Inno Setup</span>
@@ -106,8 +138,7 @@
                 <a href="https://github.com/y0uls/Ultimate_Duke_Nukem_3D_Custom_Launcher" class="card-link">Voir le repo →</a>
             </div>
 
-            <!-- ESP8266_Wi-Fi_Configuration_Tool -->
-            <div class="card">
+            <div class="card" data-tags="Arduino,ESP8266,IoT">
                 <div class="card-meta">
                     <span class="tag">Arduino</span>
                     <span class="tag">ESP8266</span>
@@ -118,8 +149,7 @@
                 <a href="https://github.com/y0uls/ESP8266_Wi-Fi_Configuration_Tool" class="card-link">Voir le repo →</a>
             </div>
 
-            <!-- qr-manager -->
-            <div class="card">
+            <div class="card" data-tags="Python,GUI,QR Code">
                 <div class="card-meta">
                     <span class="tag">Python</span>
                     <span class="tag">GUI</span>
@@ -132,6 +162,48 @@
         </div>
     </section>
 
+    <!-- ===================== HOMELAB ===================== -->
+    <!-- [3] Section Homelab -->
+    <section id="homelab">
+        <div class="section-header">
+            <span class="eyebrow">// setup</span>
+            <h2>Homelab & environnement</h2>
+        </div>
+        <div class="homelab-grid">
+            <div class="homelab-card">
+                <span class="homelab-icon">🖥️</span>
+                <h4>OS</h4>
+                <p>Windows 11 + Debian WSL2<br>Dual env, best of both worlds</p>
+            </div>
+            <div class="homelab-card">
+                <span class="homelab-icon">🐳</span>
+                <h4>Conteneurs</h4>
+                <p>Docker Compose everywhere<br>IRC · Tor · The Lounge · Nginx</p>
+            </div>
+            <div class="homelab-card">
+                <span class="homelab-icon">📡</span>
+                <h4>Hardware</h4>
+                <p>ESP8266 / NodeMCU<br>Machines custom, réseau local</p>
+            </div>
+            <div class="homelab-card">
+                <span class="homelab-icon">🔒</span>
+                <h4>Réseau</h4>
+                <p>Hidden service Tor<br>Self-signed certs, LDAP/AD</p>
+            </div>
+            <div class="homelab-card">
+                <span class="homelab-icon">⚙️</span>
+                <h4>Automatisation</h4>
+                <p>GPO PowerShell<br>Scripts de déploiement silencieux</p>
+            </div>
+            <div class="homelab-card">
+                <span class="homelab-icon">📦</span>
+                <h4>Gestion assets</h4>
+                <p>Snipe-IT self-hosted<br>Pipeline inventaire automatisé</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===================== STACK ===================== -->
     <section id="stack">
         <div class="section-header">
             <span class="eyebrow">// environnement</span>
@@ -177,6 +249,7 @@
         </div>
     </section>
 
+    <!-- ===================== CONTACT ===================== -->
     <section id="contact">
         <div class="section-header">
             <span class="eyebrow">// contact</span>
@@ -190,26 +263,185 @@
         </div>
     </section>
 
+    <!-- ===================== FOOTER ===================== -->
     <footer>
-        <span>y0uls — built with ☕ & trop de `npm install`</span>
+        <span>y0uls — built with ☕ & trop de <code>npm install</code></span>
         <span>2025</span>
     </footer>
 
     <script>
-        // Simple intersection observer for card animations
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                }
-            });
-        }, { threshold: 0.1 });
+    // ─────────────────────────────────────────────
+    // [5] EASTER EGG CONSOLE
+    // ─────────────────────────────────────────────
+    console.log(
+`%c
+██╗   ██╗ ██████╗ ██╗   ██╗██╗     ███████╗
+╚██╗ ██╔╝██╔═══██╗██║   ██║██║     ██╔════╝
+ ╚████╔╝ ██║   ██║██║   ██║██║     ███████╗
+  ╚██╔╝  ██║   ██║██║   ██║██║     ╚════██║
+   ██║   ╚██████╔╝╚██████╔╝███████╗███████║
+   ╚═╝    ╚═════╝  ╚═════╝ ╚══════╝╚══════╝
 
-        document.querySelectorAll('.card, .stack-group').forEach(el => {
-            observer.observe(el);
+  Tu fouilles le code ? Respect. — y0uls
+  → https://github.com/y0uls
+`,
+'color: #00d4aa; font-family: monospace; font-size: 12px;'
+    );
+
+    // ─────────────────────────────────────────────
+    // [1] TERMINAL INTERACTIF
+    // ─────────────────────────────────────────────
+    const terminalBody = document.getElementById('terminal-body');
+
+    const sessions = [
+        { cmd: 'whoami',    out: 'sysadmin & builder' },
+        { cmd: 'uptime',    out: 'coding since 3am, no issues detected' },
+        { cmd: 'docker ps', out: 'irc-improved   UP\nspace-warfare  UP\nqr-manager     UP\ntor-hidden     UP' },
+        { cmd: 'ls ~/repos', out: 'irc-improved/  space-warfare/  DebianWSL-XMRig/\nkeyboard_mouse_to_xinput/  ESP8266_Wi-Fi_Configuration_Tool/' },
+        { cmd: 'cat /etc/motd', out: 'Welcome back. 0 updates pending. Tor: active.' },
+    ];
+
+    let sIdx = 0;
+
+    function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+    function addLine(html) {
+        const line = document.createElement('div');
+        line.className = 'tl';
+        line.innerHTML = html;
+        terminalBody.appendChild(line);
+        terminalBody.scrollTop = terminalBody.scrollHeight;
+        return line;
+    }
+
+    async function typeCommand(cmd) {
+        const line = addLine(`<span class="t-prompt">~/y0uls</span> <span class="t-dollar">$</span> <span class="t-cmd"></span><span class="t-cursor">▊</span>`);
+        const cmdEl = line.querySelector('.t-cmd');
+        const curEl = line.querySelector('.t-cursor');
+        for (let i = 0; i <= cmd.length; i++) {
+            cmdEl.textContent = cmd.slice(0, i);
+            await sleep(55 + Math.random() * 40);
+        }
+        curEl.remove();
+    }
+
+    async function typeOutput(out) {
+        const lines = out.split('\n');
+        for (const txt of lines) {
+            await sleep(80);
+            addLine(`<span class="t-out">${txt}</span>`);
+        }
+        await sleep(200);
+        addLine('');
+    }
+
+    async function runTerminal() {
+        await sleep(600);
+        while (true) {
+            const s = sessions[sIdx % sessions.length];
+            await typeCommand(s.cmd);
+            await sleep(180);
+            await typeOutput(s.out);
+            sIdx++;
+            // Nettoie quand trop de lignes
+            if (terminalBody.children.length > 40) {
+                while (terminalBody.children.length > 20) {
+                    terminalBody.removeChild(terminalBody.firstChild);
+                }
+            }
+            await sleep(2200);
+        }
+    }
+
+    runTerminal();
+
+    // ─────────────────────────────────────────────
+    // [2] UPTIME COUNTER (fictif, incrémente en live)
+    // ─────────────────────────────────────────────
+    const uptimeEl = document.getElementById('uptime-count');
+    // Calcul depuis une date de départ fictive
+    const startDate = new Date('2022-09-01');
+    function updateUptime() {
+        const days = Math.floor((Date.now() - startDate) / 86400000);
+        if (uptimeEl) uptimeEl.textContent = days;
+    }
+    updateUptime();
+
+    // ─────────────────────────────────────────────
+    // [4] FILTRE PAR TAG
+    // ─────────────────────────────────────────────
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const cards = document.querySelectorAll('.projects-grid .card');
+
+    filterBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            filterBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            const filter = btn.dataset.filter;
+            cards.forEach(card => {
+                const tags = (card.dataset.tags || '').split(',');
+                const match = filter === 'all' || tags.includes(filter);
+                card.classList.toggle('card-hidden', !match);
+            });
         });
+    });
+
+    // ─────────────────────────────────────────────
+    // [6] GITHUB API STATS
+    // ─────────────────────────────────────────────
+    async function loadGithubStats() {
+        const statsEl = document.getElementById('gh-stats');
+        try {
+            const [userRes, eventsRes] = await Promise.all([
+                fetch('https://api.github.com/users/y0uls'),
+                fetch('https://api.github.com/users/y0uls/events/public?per_page=5')
+            ]);
+            const user = await userRes.json();
+            const events = await eventsRes.json();
+
+            // Dernière activité
+            let lastActivity = '—';
+            if (Array.isArray(events) && events.length > 0) {
+                const d = new Date(events[0].created_at);
+                const diff = Math.floor((Date.now() - d) / 86400000);
+                lastActivity = diff === 0 ? "aujourd'hui" : diff === 1 ? 'hier' : `il y a ${diff}j`;
+            }
+
+            // Calcul stars total via repos
+            const reposRes = await fetch(`https://api.github.com/users/y0uls/repos?per_page=100`);
+            const repos = await reposRes.json();
+            const totalStars = Array.isArray(repos)
+                ? repos.reduce((acc, r) => acc + (r.stargazers_count || 0), 0)
+                : 0;
+
+            statsEl.innerHTML = `
+                <span class="gh-stat-item">📦 <strong>${user.public_repos}</strong> repos publics</span>
+                <span class="gh-sep">|</span>
+                <span class="gh-stat-item">⭐ <strong>${totalStars}</strong> stars</span>
+                <span class="gh-sep">|</span>
+                <span class="gh-stat-item">👥 <strong>${user.followers}</strong> followers</span>
+                <span class="gh-sep">|</span>
+                <span class="gh-stat-item">🔥 actif <strong>${lastActivity}</strong></span>
+            `;
+        } catch (e) {
+            statsEl.innerHTML = `<span class="gh-stat-item gh-error">Stats GitHub indisponibles</span>`;
+        }
+    }
+
+    loadGithubStats();
+
+    // ─────────────────────────────────────────────
+    // SCROLL REVEAL
+    // ─────────────────────────────────────────────
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) entry.target.classList.add('visible');
+        });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.card, .stack-group, .homelab-card').forEach(el => observer.observe(el));
     </script>
 
-<script defer src="https://static.cloudflareinsights.com/beacon.min.js/v833ccba57c9e4d2798f2e76cebdd09a11778172276447" integrity="sha512-57MDmcccJXYtNnH+ZiBwzC4jb2rvgVCEokYN+L/nLlmO8rfYT/gIpW2A569iJ/3b+0UEasghjuZH/ma3wIs/EQ==" data-cf-beacon='{"version":"2024.11.0","token":"8607d2a720d14b038279025b2b5a82e5","server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
 </body>
 </html>
