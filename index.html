@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>y0uls — IT & Dev</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <span class="nav-logo">y0uls<span class="cursor">_</span></span>
+    <ul>
+      <li><a href="#projects">Projets</a></li>
+      <li><a href="#stack">Stack</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-inner">
+      <div class="terminal-line">
+        <span class="prompt">~/y0uls $</span>
+        <span class="typed" id="typed"></span><span class="caret">▊</span>
+      </div>
+      <h1>Sysadmin &amp; builder<br/><span class="accent">self-hosted everything.</span></h1>
+      <p class="hero-sub">IT admin le jour, dev de side-projects la nuit. Infrastructure Windows/AD, outils internes Node.js, et trop de Docker Compose.</p>
+      <div class="hero-cta">
+        <a href="https://github.com/y0uls" target="_blank" class="btn-primary">GitHub →</a>
+        <a href="#projects" class="btn-ghost">Voir les projets</a>
+      </div>
+    </div>
+    <div class="hero-grid" aria-hidden="true"></div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="projects">
+    <div class="section-header">
+      <span class="eyebrow">// projets récents</span>
+      <h2>Ce que je construis</h2>
+    </div>
+
+    <div class="projects-grid">
+
+      <article class="card card-featured">
+        <div class="card-meta">
+          <span class="tag">Node.js</span>
+          <span class="tag">Mobile</span>
+          <span class="tag">Snipe-IT</span>
+        </div>
+        <h3>SnipeScanner</h3>
+        <p>Application mobile single-HTML pour scanner et gérer les assets Snipe-IT sur le terrain. Auth LDAP/AD, BarcodeDetector + ZXing + jsQR, checkout/checkin, QR inversés, safe-area iOS.</p>
+        <a href="https://github.com/y0uls" class="card-link">Voir le repo →</a>
+      </article>
+
+      <article class="card">
+        <div class="card-meta">
+          <span class="tag">Socket.IO</span>
+          <span class="tag">TTS</span>
+        </div>
+        <h3>Loup-Garou Web</h3>
+        <p>Jeu multijoueur Loup-Garou en temps réel. Rôles complets (Cupidon, Voyante, Sorcière…), narration TTS Web Speech API, lobby avec QR codes.</p>
+        <a href="https://github.com/y0uls" class="card-link">Voir le repo →</a>
+      </article>
+
+      <article class="card">
+        <div class="card-meta">
+          <span class="tag">PowerShell</span>
+          <span class="tag">GPO</span>
+          <span class="tag">API</span>
+        </div>
+        <h3>Inventory Pipeline</h3>
+        <p>Pipeline d'inventaire automatisé : GPO PowerShell → middleware Node.js → sync Snipe-IT. CPU, RAM, disque, Service Tag Dell, licences Office.</p>
+        <a href="https://github.com/y0uls" class="card-link">Voir le repo →</a>
+      </article>
+
+      <article class="card">
+        <div class="card-meta">
+          <span class="tag">ADB</span>
+          <span class="tag">WebSocket</span>
+        </div>
+        <h3>ADB Web Dashboard</h3>
+        <p>Interface web pour piloter un Android via ADB depuis le navigateur. Backend Express, WebSocket temps réel, contrôle complet sans câble USB visible.</p>
+        <a href="https://github.com/y0uls" class="card-link">Voir le repo →</a>
+      </article>
+
+      <article class="card">
+        <div class="card-meta">
+          <span class="tag">npm</span>
+          <span class="tag">OpenPGP</span>
+          <span class="tag">ESM</span>
+        </div>
+        <h3>@y0uls/nodepgp</h3>
+        <p>Module npm ESM wrapper autour d'openpgp.js. Chiffrement/déchiffrement PGP simplifié, compatible Node.js + WebCrypto, publié sur npm.</p>
+        <a href="https://www.npmjs.com/package/@y0uls/nodepgp" target="_blank" class="card-link">npm →</a>
+      </article>
+
+      <article class="card">
+        <div class="card-meta">
+          <span class="tag">Docker</span>
+          <span class="tag">Redis</span>
+          <span class="tag">IRC</span>
+        </div>
+        <h3>Infra IRC privée</h3>
+        <p>Stack Docker : InspIRCd + The Lounge + service Tor hidden. Packaging client Windows automatisé (HexChat pré-configuré) via batch.</p>
+        <a href="https://github.com/y0uls" class="card-link">Voir le repo →</a>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- STACK -->
+  <section id="stack">
+    <div class="section-header">
+      <span class="eyebrow">// environnement</span>
+      <h2>Stack &amp; outils</h2>
+    </div>
+    <div class="stack-grid">
+      <div class="stack-group">
+        <h4>Backend</h4>
+        <ul>
+          <li>Node.js / Express</li>
+          <li>Socket.IO</li>
+          <li>PowerShell</li>
+          <li>REST APIs</li>
+        </ul>
+      </div>
+      <div class="stack-group">
+        <h4>Infrastructure</h4>
+        <ul>
+          <li>Docker / Compose</li>
+          <li>Nginx</li>
+          <li>Windows AD / LDAP</li>
+          <li>GPO deployment</li>
+        </ul>
+      </div>
+      <div class="stack-group">
+        <h4>Frontend</h4>
+        <ul>
+          <li>HTML / CSS vanilla</li>
+          <li>Chart.js</li>
+          <li>WebSocket / SSE</li>
+          <li>Progressive Web App</li>
+        </ul>
+      </div>
+      <div class="stack-group">
+        <h4>Outils</h4>
+        <ul>
+          <li>Snipe-IT</li>
+          <li>Redis</li>
+          <li>Git / GitHub</li>
+          <li>ADB</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="contact-inner">
+      <span class="eyebrow">// contact</span>
+      <h2>Me retrouver</h2>
+      <p>Le code est sur GitHub. Pour tout le reste :</p>
+      <div class="contact-links">
+        <a href="https://github.com/y0uls" target="_blank" class="btn-primary">GitHub / y0uls</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <span>y0uls — built with ☕ &amp; trop de <code>npm install</code></span>
+    <span class="footer-year">2025</span>
+  </footer>
+
+  <script>
+    // Terminal typing animation
+    const lines = [
+      'whoami',
+      'cat /etc/motd',
+      'docker ps -a',
+      'git log --oneline',
+    ];
+    let li = 0, ci = 0, deleting = false;
+    const el = document.getElementById('typed');
+
+    function type() {
+      const line = lines[li];
+      if (!deleting) {
+        el.textContent = line.slice(0, ++ci);
+        if (ci === line.length) { deleting = true; setTimeout(type, 1800); return; }
+      } else {
+        el.textContent = line.slice(0, --ci);
+        if (ci === 0) { deleting = false; li = (li + 1) % lines.length; setTimeout(type, 400); return; }
+      }
+      setTimeout(type, deleting ? 40 : 80);
+    }
+    type();
+
+    // Smooth scroll for nav links
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.addEventListener('click', e => {
+        e.preventDefault();
+        document.querySelector(a.getAttribute('href'))?.scrollIntoView({ behavior: 'smooth' });
+      });
+    });
+
+    // Intersection observer for card reveal
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.card, .stack-group').forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>
