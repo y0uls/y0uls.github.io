@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sysadmin & Builder</title>
+<title>y0uls@localhost:~</title>
 <style>
   :root{
     --bg:#0a0e0a; --fg:#c9ffcf; --dim:#4a6b4f; --accent:#39ff6a;
@@ -24,10 +24,22 @@
     box-shadow:0 0 0 1px #1c2a1c,0 30px 80px -20px rgba(0,255,90,.15),inset 0 0 120px rgba(0,0,0,.6);
     display:flex;flex-direction:column;overflow:hidden;position:relative;
     transition:width .9s cubic-bezier(.7,0,.2,1),height .9s cubic-bezier(.7,0,.2,1),border-radius .9s ease;
+    z-index:2;
   }
   .crt.fullscreen{
     width:100vw;height:100vh;border-radius:0;
   }
+  /* slide the whole terminal off to reveal the portfolio underneath */
+  .crt.slide-away{
+    transition:transform .8s cubic-bezier(.6,0,.2,1),opacity .8s ease;
+    transform:translateX(115%) rotate(2deg);opacity:0;
+  }
+  /* full-page portfolio behind the terminal, revealed on close */
+  #portfolioLayer{
+    position:fixed;inset:0;border:0;width:100vw;height:100vh;
+    z-index:1;background:#0d1117;display:none;
+  }
+  #portfolioLayer.show{display:block}
   body.gui-mode{padding:0}
   /* GUI landing shown once expanded */
   .gui-screen{
@@ -142,6 +154,7 @@
 </style>
 </head>
 <body>
+  <iframe id="portfolioLayer" title="portfolio"></iframe>
   <div class="crt" id="crt">
     <div class="bar">
       <span class="dot r" id="btnClose" title="close / toggle GUI"></span><span class="dot y"></span><span class="dot g"></span>
@@ -300,7 +313,7 @@ function passwordPrompt(label,cb){
 
 /* ---------- key handling ---------- */
 const COMMANDS=["help","ls","cd","cat","clear","whoami","about","projects","stack",
-  "nmap","pgp","sudo","neofetch","ssh","decode","date","echo","banner","gui","github","reboot","open"];
+  "nmap","pgp","sudo","neofetch","ssh","decode","date","echo","banner","gui","github","reboot","exit","logout","open"];
 const VAULT_COMMANDS=["help","ls","cat","flag","msg","tor","whoami","clear","exit","logout"];
 function onKey(e){
   const inp=e.target;
@@ -445,6 +458,7 @@ const DISPATCH={
   <span class="amb">clear</span>           wipe screen         <span class="amb">date</span>          current time
   <span class="amb">github</span>          open my GitHub      <span class="amb">gui</span>           open portfolio
   <span class="amb">decode &lt;algo&gt;</span>   base64/sha1/hex/rot13
+  <span class="amb">exit / logout</span>   slide to portfolio  <span class="amb">reboot</span>        restart the shell
   <span class="dim">…and a few things that aren't on this list. poke around.</span>`);
   },
   ls(args){
@@ -504,6 +518,8 @@ const DISPATCH={
   async pgp(){ await pgp(); },
   async reboot(){ await reboot(); },
   async gui(){ await guiMode(); },
+  async exit(){ suppressPrompt=true; await closeTerminal(); },
+  async logout(){ suppressPrompt=true; await closeTerminal(); },
   github(){out("<a href='https://github.com/y0uls' target='_blank' rel='noopener'>github.com/y0uls</a> — all my public repos");},
   open(args){this.cat(args);},
 };
@@ -912,6 +928,29 @@ async function exitGui(){
   newPrompt();
 }
 
+let closing=false;
+async function closeTerminal(){
+  if(closing) return;
+  closing=true;
+  if(activeInput) freeze(activeInput.value);
+  out(`<span class="dim">logout — closing session…</span>`);
+  const crt=document.getElementById('crt');
+  const layer=document.getElementById('portfolioLayer');
+
+  // load the portfolio behind the terminal (no boot), then slide the terminal away
+  layer.src="portfolio.html?embedded=1";
+  layer.classList.add('show');
+  let loaded=false;
+  layer.addEventListener('load',()=>{ loaded=true; },{once:true});
+  const t0=performance.now();
+  while(!loaded && performance.now()-t0<4000){ await sleep(80); }
+
+  await sleep(250);
+  crt.classList.add('slide-away');   // window slides off to the right
+  await sleep(850);
+  crt.style.display="none";          // fully out of the way; portfolio now owns the screen
+}
+
 async function sudo(args){
   const j=args.join(" ");
   if(/rm\s+-rf\s+\/(\s|$)/.test(j)){
@@ -1006,12 +1045,12 @@ screen.addEventListener('click',()=>{
   if(activeInput) activeInput.focus();
 });
 
-// red titlebar dot: acts as a close/toggle. In GUI mode -> back to terminal;
-// in normal mode -> launch GUI (portfolio).
+// red titlebar dot = close. In GUI mode -> back to terminal.
+// In the normal shell -> slide the window away and reveal the portfolio (no boot).
 document.getElementById('btnClose').addEventListener('click',(e)=>{
   e.stopPropagation();
   if(guiActive){ exitGui(); }
-  else if(!vaultMode){ guiMode(); }
+  else if(!vaultMode){ closeTerminal(); }
 });
 
 /* right-click = terminal-style copy/paste:
