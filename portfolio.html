@@ -8,6 +8,15 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <script>
+    // If loaded inside the terminal's GUI iframe, hide the boot screen before first paint (no flash).
+    if (new URLSearchParams(location.search).has('embedded')) {
+        document.documentElement.classList.add('embedded');
+    }
+    </script>
+    <style>
+    html.embedded #boot-screen { display: none !important; }
+    </style>
 </head>
 <body>
 
@@ -448,7 +457,9 @@
     async function runBoot() {
         const bootScreen = document.getElementById('boot-screen');
         const bootLog = document.getElementById('boot-log');
-        if (sessionStorage.getItem('y0uls_booted')) {
+        // Loaded inside the terminal's GUI iframe -> the boot already played there. Skip it entirely.
+        const embedded = new URLSearchParams(location.search).has('embedded');
+        if (embedded || sessionStorage.getItem('y0uls_booted')) {
             bootScreen.remove();
             return;
         }
