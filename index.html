@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>y0uls@localhost:~</title>
+<title>Sysadmin & Builder</title>
 <style>
   :root{
     --bg:#0a0e0a; --fg:#c9ffcf; --dim:#4a6b4f; --accent:#39ff6a;
@@ -31,15 +31,18 @@
   }
   /* slide the whole terminal off to reveal the portfolio underneath */
   .crt.slide-away{
-    transition:transform .8s cubic-bezier(.6,0,.2,1),opacity .8s ease;
+    transition:transform 1s cubic-bezier(.6,0,.2,1),opacity 1s ease;
     transform:translateX(115%) rotate(2deg);opacity:0;
   }
   /* full-page portfolio behind the terminal, revealed on close */
   #portfolioLayer{
     position:fixed;inset:0;border:0;width:100vw;height:100vh;
-    z-index:1;background:#0d1117;display:none;
+    z-index:1;background:#0d1117;
+    opacity:0;visibility:hidden;
+    transition:opacity 1s ease;
   }
-  #portfolioLayer.show{display:block}
+  #portfolioLayer.show{visibility:visible}
+  #portfolioLayer.reveal{opacity:1}
   body.gui-mode{padding:0}
   /* GUI landing shown once expanded */
   .gui-screen{
@@ -937,18 +940,20 @@ async function closeTerminal(){
   const crt=document.getElementById('crt');
   const layer=document.getElementById('portfolioLayer');
 
-  // load the portfolio behind the terminal (no boot), then slide the terminal away
+  // load the portfolio behind the terminal (no boot), kept invisible until ready
   layer.src="portfolio.html?embedded=1";
-  layer.classList.add('show');
+  layer.classList.add('show');            // visibility:visible, still opacity:0
   let loaded=false;
   layer.addEventListener('load',()=>{ loaded=true; },{once:true});
   const t0=performance.now();
   while(!loaded && performance.now()-t0<4000){ await sleep(80); }
 
   await sleep(250);
-  crt.classList.add('slide-away');   // window slides off to the right
-  await sleep(850);
-  crt.style.display="none";          // fully out of the way; portfolio now owns the screen
+  // fade the portfolio in and slide the terminal away at the same time
+  layer.classList.add('reveal');
+  crt.classList.add('slide-away');
+  await sleep(1000);
+  crt.style.display="none";               // fully out; portfolio now owns the screen
 }
 
 async function sudo(args){
