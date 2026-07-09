@@ -1236,3 +1236,56 @@ body.root-mode .nav-logo {
     }
     .qr-block { order: -1; }
 }
+/* ============================================
+   MOBILE RESPONSIVE — added for phone layout
+   ============================================ */
+@media (max-width: 640px) {
+    /* tighter horizontal padding so nothing hugs the edges */
+    section { padding: 3.5rem 1.1rem; }
+    .hero { padding: 4rem 1.1rem 3rem; }
+    nav { padding: 0 1.1rem; }
+    .gh-stats-bar { padding: 0.75rem 1.1rem; }
+
+    /* hero terminal: let long command lines wrap instead of overflowing */
+    .terminal-body { font-size: 0.72rem; padding: 0.85rem 0.9rem; }
+    .tl { white-space: pre-wrap; word-break: break-word; }
+
+    /* headings scale down a touch more */
+    .hero h1 { font-size: clamp(1.6rem, 8vw, 2.4rem); }
+    .hero-sub { font-size: 0.95rem; }
+    .section-header h2 { font-size: clamp(1.3rem, 6vw, 1.8rem); }
+
+    /* single-column grids on small screens */
+    .projects-grid { grid-template-columns: 1fr; }
+    .homelab-grid  { grid-template-columns: 1fr 1fr; }
+    .stack-grid    { grid-template-columns: 1fr 1fr; }
+
+    /* CTA buttons stack full-width and are easy to tap */
+    .hero-cta { flex-direction: column; align-items: stretch; gap: 0.6rem; }
+    .hero-cta .btn-primary, .hero-cta .btn-ghost { text-align: center; }
+
+    /* monospace panels: allow horizontal scroll rather than breaking layout */
+    .scan-line { font-size: 0.72rem; }
+    .htop-body { overflow-x: auto; }
+    .htop-row, .htop-procs { min-width: 320px; }
+
+    /* network topology: fit and shrink */
+    .topo-svg { height: 160px; }
+    .topo-legend { flex-wrap: wrap; gap: 0.5rem 1rem; font-size: 0.72rem; }
+
+    /* filter bar wraps and scrolls comfortably */
+    .filter-bar { flex-wrap: wrap; gap: 0.4rem; }
+    .filter-btn { font-size: 0.75rem; padding: 0.35rem 0.7rem; }
+
+    /* contact: stack, QR not too huge */
+    .qr-img { width: 200px; height: 200px; }
+
+    /* footer already stacks; keep it centered */
+    footer { padding: 1.5rem 1.1rem; }
+}
+
+/* very small phones */
+@media (max-width: 380px) {
+    .homelab-grid, .stack-grid { grid-template-columns: 1fr; }
+    .terminal-body { font-size: 0.68rem; }
+}

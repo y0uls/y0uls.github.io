@@ -4,6 +4,22 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Sysadmin & Builder</title>
+<script>
+// The terminal is a desktop/keyboard experience. On phones (small + touch), skip
+// straight to the responsive portfolio instead. ?noredirect=1 forces the terminal.
+(function(){
+  try{
+    var params = new URLSearchParams(location.search);
+    if (params.has('noredirect')) return;
+    var coarse = window.matchMedia && window.matchMedia('(pointer:coarse)').matches;
+    var narrow = Math.min(window.innerWidth, window.innerHeight) <= 768;
+    var touch  = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+    if (narrow && (coarse || touch)) {
+      location.replace('portfolio.html');
+    }
+  }catch(e){}
+})();
+</script>
 <style>
   :root{
     --bg:#0a0e0a; --fg:#c9ffcf; --dim:#4a6b4f; --accent:#39ff6a;
