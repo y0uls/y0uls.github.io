@@ -134,6 +134,9 @@
     flex:1;background:transparent;border:0;outline:0;color:var(--fg);
     font:inherit;caret-color:var(--accent);padding:0 0 0 8px;
   }
+  /* masked like a password field, but it's a plain text input so browsers /
+     password managers (Firefox, Vaultwarden, 1Password…) don't offer to fill it */
+  input.cmd.masked{-webkit-text-security:disc;text-security:disc}
   a{color:var(--cyan)}
   .dim{color:var(--dim)}.acc{color:var(--accent)}.amb{color:var(--amber)}
   .red{color:var(--red)}.vio{color:var(--violet)}.cy{color:var(--cyan)}
@@ -170,6 +173,149 @@
   }
   .bootline{opacity:0;animation:fadein .18s forwards}
   @keyframes fadein{to{opacity:1}}
+
+  /* ---- tor browser overlay ---- */
+  .tor-screen{
+    position:fixed;inset:0;z-index:50;display:none;flex-direction:column;
+    background:#15101d;opacity:0;transform:translateY(14px);
+    transition:opacity .45s ease,transform .45s cubic-bezier(.6,0,.2,1);
+    font-family:var(--font);
+  }
+  .tor-screen.show{display:flex;opacity:1;transform:none}
+  .tor-chrome{
+    flex:0 0 auto;display:flex;align-items:center;gap:8px;padding:8px 10px;
+    background:#241a33;border-bottom:1px solid #3a2b52;
+  }
+  .tor-nav{display:flex;gap:4px}
+  .tor-nav button{
+    width:26px;height:26px;border:0;border-radius:6px;background:#2f2344;color:#b9a7d6;
+    font:inherit;font-size:13px;cursor:default;opacity:.55;
+  }
+  .tor-addr{
+    flex:1;display:flex;align-items:center;gap:8px;height:30px;padding:0 10px;min-width:0;
+    background:#1b1427;border:1px solid #3a2b52;border-radius:8px;color:#c9b8e6;font-size:12px;
+  }
+  .tor-addr .oni{color:#c792ff;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+  .tor-addr .lock{color:#8f6fd6;flex:0 0 auto}
+  .tor-newid{
+    flex:0 0 auto;border:1px solid #4a3a66;background:#2f2344;color:#c9b8e6;border-radius:8px;
+    padding:6px 10px;font:inherit;font-size:11px;cursor:pointer;
+  }
+  .tor-newid:hover{background:#3a2b52}
+  .tor-x{
+    flex:0 0 auto;width:28px;height:28px;border:1px solid #4a3a66;background:#2f2344;color:#e6a0a0;
+    border-radius:8px;font:inherit;font-size:14px;cursor:pointer;
+  }
+  .tor-x:hover{background:#3a2233}
+  .tor-body{flex:1;overflow-y:auto;color:#d8ccec;position:relative;scrollbar-width:thin;scrollbar-color:#4a3a66 transparent}
+  .tor-body::-webkit-scrollbar{width:9px}
+  .tor-body::-webkit-scrollbar-thumb{background:#4a3a66;border-radius:4px}
+  .tor-circuit{
+    display:flex;gap:6px;align-items:center;padding:6px 12px;font-size:11px;color:#8f7bb0;
+    background:#1b1427;border-bottom:1px solid #2b2038;flex-wrap:wrap;
+  }
+  .tor-circuit b{color:#9d7bd6;font-weight:600}
+  /* onion page */
+  .oni-wrap{max-width:760px;margin:0 auto;padding:26px 22px 60px}
+  .oni-head{border-bottom:1px solid #3a2b52;padding-bottom:14px;margin-bottom:18px}
+  .oni-head h1{margin:0 0 4px;font-size:20px;color:#e0d0ff;letter-spacing:.5px}
+  .oni-head .sub{color:#7d6ba0;font-size:12px}
+  .oni-warn{
+    background:#2a1420;border:1px solid #5a2a3a;color:#ffb0b0;
+    padding:8px 12px;border-radius:8px;font-size:11px;margin-bottom:16px;line-height:1.5;
+  }
+  /* invite gate */
+  .gate{max-width:430px;margin:36px auto;text-align:center}
+  .gate h2{color:#e0d0ff;font-size:16px;margin:0 0 6px}
+  .gate p{color:#8f7bb0;font-size:12px;margin:0 0 16px;line-height:1.6}
+  .gate-col{display:flex;flex-direction:column;gap:8px}
+  .gate-row{display:flex;gap:8px}
+  .gate input{
+    flex:1;min-width:0;background:#1b1427;border:1px solid #3a2b52;border-radius:8px;color:#e0d0ff;
+    font:inherit;font-size:13px;padding:10px 12px;outline:0;letter-spacing:1px;
+  }
+  .gate input:focus{border-color:#8f6fd6}
+  .gate button{
+    background:#3a2b52;border:1px solid #6a4fa0;color:#e0d0ff;border-radius:8px;
+    padding:10px 16px;font:inherit;font-size:13px;cursor:pointer;
+  }
+  .gate button:hover{background:#4a3a66}
+  .gate .err{color:#ff8080;font-size:12px;margin-top:12px;min-height:16px}
+  .gate.shake{animation:gshake .4s}
+  @keyframes gshake{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-8px)}40%,80%{transform:translateX(8px)}}
+  /* irc */
+  .irc{display:flex;height:100%}
+  .irc-main{flex:1;display:flex;flex-direction:column;min-width:0}
+  .irc-topic{padding:10px 16px;border-bottom:1px solid #2b2038;color:#9d7bd6;font-size:12px;background:#1b1427}
+  .irc-log{flex:1;overflow-y:auto;padding:12px 16px;display:flex;flex-direction:column;gap:3px;font-size:13px;line-height:1.55;scrollbar-width:thin;scrollbar-color:#4a3a66 transparent}
+  .irc-log::-webkit-scrollbar{width:8px}.irc-log::-webkit-scrollbar-thumb{background:#4a3a66;border-radius:4px}
+  .irc-msg{word-break:break-word}
+  .irc-msg .nick{color:#7d6ba0}
+  .irc-msg .nick.bot{color:var(--accent)}
+  .irc-msg .nick.me{color:var(--cyan)}
+  .irc-msg .nick.ghost{color:var(--violet)}
+  .irc-msg.sys{color:#6a5a86;font-style:italic}
+  .irc-msg .amb{color:var(--amber)}
+  .irc-input{display:flex;border-top:1px solid #2b2038;background:#1b1427}
+  .irc-input .p{padding:10px 2px 10px 14px;color:var(--cyan);flex:0 0 auto}
+  .irc-input input{flex:1;min-width:0;background:transparent;border:0;outline:0;color:#e0d0ff;font:inherit;font-size:13px;padding:10px 12px 10px 6px}
+  .irc-users{
+    flex:0 0 132px;border-left:1px solid #2b2038;padding:10px 12px;background:#180f24;font-size:12px;color:#8f7bb0;
+  }
+  .irc-users h4{margin:0 0 8px;color:#6a5a86;font-size:10px;text-transform:uppercase;letter-spacing:1px}
+  .irc-users div{padding:2px 0}
+  .irc-users .bot{color:var(--accent)}.irc-users .me{color:var(--cyan)}.irc-users .ghost{color:var(--violet)}
+  @media(max-width:560px){.irc-users{display:none}}
+  /* tab strip + window chrome */
+  .tor-tabs{display:flex;align-items:center;gap:4px;padding:6px 8px 0;background:#1a1226;border-bottom:1px solid #2b2038}
+  .tor-tab{display:flex;align-items:center;gap:8px;max-width:250px;padding:7px 10px;font-size:12px;color:#d8ccec;
+    background:#241a33;border:1px solid #3a2b52;border-bottom:none;border-radius:9px 9px 0 0}
+  .tor-tab .fav{font-size:13px;line-height:1;flex:0 0 auto}
+  .tor-tab .fav.spin{display:inline-block;animation:torspin .8s linear infinite}
+  @keyframes torspin{to{transform:rotate(360deg)}}
+  .tor-tab .ttl{overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+  .tor-tab .tclose{flex:0 0 auto;color:#8f7bb0;cursor:pointer;border-radius:4px;padding:0 4px;line-height:1.4}
+  .tor-tab .tclose:hover{background:#3a2b52;color:#e6a0a0}
+  .tor-tabadd{background:transparent;border:0;color:#8f7bb0;font-size:16px;cursor:pointer;padding:2px 9px;border-radius:6px}
+  .tor-tabadd:hover{background:#241a33;color:#d8ccec}
+  .tor-winctl{margin-left:auto;display:flex;gap:2px}
+  .tor-winctl span{width:30px;height:24px;display:flex;align-items:center;justify-content:center;color:#8f7bb0;font-size:12px;border-radius:4px;cursor:pointer}
+  .tor-winctl span:hover{background:#2f2344}
+  .tor-winctl .wx:hover{background:#c0392b;color:#fff}
+  .tor-ico-btn{flex:0 0 auto;width:30px;height:30px;border:1px solid #3a2b52;background:#2f2344;color:#c9b8e6;
+    border-radius:8px;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+  .tor-ico-btn:hover{background:#3a2b52}
+  .tor-addr .oni-ico{color:#c792ff;flex:0 0 auto}
+  .tor-addr .circinfo{margin-left:auto;color:#7d6ba0;flex:0 0 auto;cursor:default}
+  /* page-load progress bar */
+  .tor-progress{flex:0 0 auto;height:2px;overflow:hidden}
+  .tor-progress .bar{height:100%;width:0;opacity:0;background:linear-gradient(90deg,#9d5bff,#c792ff);
+    box-shadow:0 0 8px #9d5bff;transition:width .3s ease,opacity .35s ease}
+  /* loading veil */
+  .tor-load{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;height:100%;min-height:280px;color:#8f7bb0}
+  .tor-load .spinner{width:34px;height:34px;border:3px solid #3a2b52;border-top-color:#c792ff;border-radius:50%;animation:torspin .8s linear infinite}
+  .tor-load .lmsg{font-size:12px}
+  /* status bar */
+  .tor-status{flex:0 0 auto;height:23px;display:flex;align-items:center;gap:8px;padding:0 12px;
+    background:#1a1226;border-top:1px solid #2b2038;color:#7d6ba0;font-size:11px;overflow:hidden;white-space:nowrap}
+  .tor-status .conn{color:#9d7bd6}
+  /* draggable/floating terminal window + desktop taskbar */
+  .crt.floating{position:fixed;margin:0}
+  .crt.draggable .bar{cursor:move}
+  .taskbar{
+    position:fixed;left:50%;bottom:16px;transform:translateX(-50%);z-index:200;
+    display:none;gap:6px;padding:7px;background:rgba(20,14,26,.92);
+    border:1px solid #3a2b52;border-radius:14px;box-shadow:0 10px 34px rgba(0,0,0,.55);
+    backdrop-filter:blur(10px);
+  }
+  .taskbar.show{display:flex}
+  .taskbar button{
+    display:flex;align-items:center;gap:7px;border:1px solid transparent;background:transparent;
+    color:#c9b8e6;font-family:var(--font);font-size:12px;padding:8px 14px;border-radius:9px;cursor:pointer;
+  }
+  .taskbar button:hover{background:#2f2344}
+  .taskbar button.active{background:#3a2b52;border-color:#6a4fa0;color:#e6d8ff}
+  .taskbar .ic{font-size:15px;line-height:1}
 </style>
 </head>
 <body>
@@ -187,6 +333,10 @@
     <div class="whiteout" id="whiteout"></div>
     <div class="gui-screen" id="guiScreen"></div>
   </div>
+  <!-- tor browser lives OUTSIDE the terminal: a page laid over everything, not a window resize -->
+  <div class="tor-screen" id="torScreen"></div>
+  <!-- desktop-style taskbar shown while both windows are open -->
+  <div class="taskbar" id="taskbar"></div>
 
 <script>
 "use strict";
@@ -288,7 +438,7 @@ function sleep(ms){return new Promise(r=>setTimeout(r,ms));}
 /* ---------- prompt ---------- */
 function ps1html(){
   if(vaultMode){
-    return `<span class="ps1"><span class="vio">root</span><span class="at">@</span><span class="vio">vault</span><span class="at">:</span><span class="path">/root</span><span class="vio">#</span></span>`;
+    return `<span class="ps1"><span class="vio">root</span><span class="at">@</span><span class="vio">vault</span><span class="at">:</span><span class="path">${esc(vcwd)}</span><span class="vio">#</span></span>`;
   }
   return `<span class="ps1"><span class="acc">y0uls</span><span class="at">@</span><span class="host">${HOST}</span><span class="at">:</span><span class="path">${cwd}</span><span class="acc">$</span></span>`;
 }
@@ -299,6 +449,19 @@ let vaultMode=false;      // true once logged into vault shell
 let suppressPrompt=false; // set when a command reboots the shell itself
 const VAULT_PASS="r00tk1t_kitty";
 const VAULT_SHA1="e187d805962ba5632ff2639679b1dda6a2fc4c15";
+// --- deep layer: the flag behind the flag ---
+const SURFACE_FLAG="FLAG{y0u_r34d_b3tw33n_th3_l1n3s}";
+// flag.asc is real AES-GCM (gpg -c style), decrypted in-browser via WebCrypto.
+// payload = base64( salt[17] || iv[12] || ciphertext ). passphrase lives only on the onion.
+const DEEP_CT="eTB1bHMtdmF1bHQtb25pb24OGis8TV5vcIGSo7TetfgUkykCfBB9L1rOWmqHdhszmd+2+YPRH2OUnw8egtBr97a/b9BI1Y5WuDnX";
+const DEEP_PASS="th3_c1rcu1t_h0lds";
+const ONION_ADDR="vault7k3mxq4f2rj9plnb8wxyz3ah6dtc5oq1e0uvw2s.onion";
+const ONION_INVITE="INV-4KZ9-QF2X-7T1A";
+const ONION_INVITE_B64="SU5WLTRLWjktUUYyWC03VDFB";   // base64(ONION_INVITE) — hidden in secrets/
+const ONION_CHANNEL="vault";                          // the right channel to join (without the '#')
+let torActive=false;
+let sshVaultTries=0;   // progressive-hint counters (reset on reboot)
+let ircWrong=0;
 function newPrompt(){
   const wrap=document.createElement('div');
   wrap.className='line prompt-line';
@@ -321,7 +484,8 @@ function passwordPrompt(label,cb){
   onPassword=cb;
   const wrap=document.createElement('div');
   wrap.className='line prompt-line';
-  wrap.innerHTML=`<span class="ps1 dim">${esc(label)}</span><span class="input-wrap"><input class="cmd" type="password" autocomplete="off" spellcheck="false"/></span>`;
+  // type="text" + CSS masking (not type="password") so no manager offers to autofill it
+  wrap.innerHTML=`<span class="ps1 dim">${esc(label)}</span><span class="input-wrap"><input class="cmd masked" type="text" inputmode="text" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" name="q" data-lpignore="true" data-1p-ignore data-bwignore data-form-type="other"/></span>`;
   screen.appendChild(wrap);
   const inp=wrap.querySelector('input');
   activeInput=inp;
@@ -333,7 +497,7 @@ function passwordPrompt(label,cb){
 /* ---------- key handling ---------- */
 const COMMANDS=["help","ls","cd","cat","clear","whoami","about","projects","stack",
   "nmap","pgp","sudo","neofetch","ssh","decode","date","echo","banner","gui","github","reboot","exit","logout","open"];
-const VAULT_COMMANDS=["help","ls","cat","flag","msg","tor","whoami","clear","exit","logout"];
+const VAULT_COMMANDS=["help","ls","cd","cat","flag","gpg","decode","msg","tor","whoami","clear","exit","logout"];
 function onKey(e){
   const inp=e.target;
   if(e.key==="Enter"){
@@ -342,8 +506,8 @@ function onKey(e){
       freeze("••••••••");
       const cb=onPassword; inputMode="normal"; onPassword=null;
       const r=cb?cb(pw):null;
-      if(r&&r.then){ r.then(()=>{ if(inputMode!=="password") newPrompt(); }); }
-      else if(inputMode!=="password"){ newPrompt(); }
+      if(r&&r.then){ r.then(()=>{ if(inputMode!=="password" && !suppressPrompt) newPrompt(); suppressPrompt=false; }); }
+      else if(inputMode!=="password"){ if(!suppressPrompt) newPrompt(); suppressPrompt=false; }
       return;
     }
     const val=inp.value;
@@ -402,12 +566,27 @@ function autocomplete(inp){
     return;
   }
 
-  // vault mode: complete cat against vault files
+  // vault mode: complete file/dir arguments against the vault FS + cwd
   if(vaultMode){
-    if(cmd!=="cat") return;
-    const m=Object.keys(VAULT_FILES).filter(f=>f.startsWith(last));
-    if(m.length===1){ parts[parts.length-1]=m[0]; inp.value=parts.join(" ")+" "; }
-    else if(m.length>1){ parts[parts.length-1]=commonPrefix(m); const f=parts.join(" "); out(m.join("   "),"dim"); newPrompt(); activeInput.value=f; }
+    if(!["cat","gpg","open","ls","cd"].includes(cmd)) return;
+    // gpg options: complete --decrypt / -d
+    if(cmd==="gpg" && last.startsWith("-")){
+      const opts=["--decrypt","-d"].filter(o=>o.startsWith(last));
+      if(opts.length===1){ parts[parts.length-1]=opts[0]; inp.value=parts.join(" ")+" "; }
+      else if(opts.length>1){ out(opts.join("   "),"dim"); newPrompt(); activeInput.value=inp.value; }
+      return;
+    }
+    let items=vaultPool(last);
+    if(cmd==="cd") items=items.filter(p=>p.endsWith("/"));   // cd completes directories only
+    let m=items.filter(x=>x.startsWith(last));
+    if(last.endsWith("/") && m.includes(last)){ const ch=m.filter(x=>x!==last); if(ch.length) m=ch; }
+    if(m.length===1){
+      parts[parts.length-1]=m[0];
+      inp.value=parts.join(" ")+(m[0].endsWith("/")?"":" ");   // dir -> no trailing space
+    } else if(m.length>1){
+      parts[parts.length-1]=commonPrefix(m);
+      const f=parts.join(" "); out(m.join("   "),"dim"); newPrompt(); activeInput.value=f;
+    }
     return;
   }
 
@@ -544,69 +723,175 @@ const DISPATCH={
 };
 
 /* ---------- vault (secret shell) ---------- */
+const FLAG_ASC=
+`-----BEGIN PGP MESSAGE-----
+Comment: symmetric (gpg -c) · AES256 · the passphrase never touched this disk
+
+${DEEP_CT.match(/.{1,64}/g).join("\n")}
+-----END PGP MESSAGE-----`;
+// vault filesystem: you land in /root; the way in is in root's own shell history
+const VAULT_FS={
+  "/":     {type:"dir", children:["root"]},
+  "/root": {type:"dir", children:["welcome.txt","notes.md","flag.asc",".flag",".bash_history"]},
+};
 const VAULT_FILES={
-  "welcome.txt":
+  "/root/welcome.txt":
 `You made it past the front door. Respect.
 Three layers: nmap -> base64 -> sha1 -> ssh. Classic.
 
-If you got here, you're exactly the kind of person I built
-this stuff for. Poke at 'flag', 'msg', 'tor'.`,
-  "notes.md":
+But 'flag' is just the surface. Read 'notes.md' — the real
+prize is sealed, and its key isn't on this machine.`,
+  "/root/notes.md":
 `vault // scratchpad
-- irc-improved runs as a Tor hidden service, web UI on the LAN
-- the whole client ships as a signed Windows package
-- someday: wire real openpgp.js verification into this terminal`,
-  ".flag":
-`FLAG{y0u_r34d_b3tw33n_th3_l1n3s}`,
+- the last flag is sealed, and its key was never written on this box.
+  the people who hold it don't live on any public port. you know how
+  i reach them — same way irc-improved stays online.
+- i'm careful about a lot of things. clearing my shell history isn't
+  one of them. everything i typed to get in is still sitting there.
+- you already carry every tool you need. 'help', then look around.`,
+  "/root/flag.asc": FLAG_ASC,
+  "/root/.flag": `${SURFACE_FLAG}`,
+  "/root/.bash_history":
+`ls -la
+uptime
+systemctl status irc-improved.service
+tor --verify-config
+# rejoin to refresh the channel invite before it rotates
+irssi -c ${ONION_ADDR}
+/join #vault $(echo ${ONION_INVITE_B64} | base64 -d)
+history -c`,
 };
+let vcwd="/root";   // vault current directory
+function vJoin(dir,seg){ return dir==="/" ? "/"+seg : dir+"/"+seg; }
+function vResolve(arg){
+  if(!arg) return vcwd;
+  const base = arg.startsWith("/") ? "" : vcwd;
+  const stack=[];
+  for(const p of (base+"/"+arg).split("/")){
+    if(p===""||p===".") continue;
+    if(p===".."){ stack.pop(); continue; }
+    stack.push(p);
+  }
+  return "/"+stack.join("/");
+}
+// candidate paths under the fragment being completed (for Tab in the vault)
+function vaultPool(last){
+  const slash=last.lastIndexOf("/");
+  const dirPart=slash>=0?last.slice(0,slash+1):"";
+  const dir = dirPart==="" ? vcwd : vResolve(dirPart.replace(/\/$/,""));
+  const node=VAULT_FS[dir];
+  if(!node||node.type!=="dir") return [];
+  return node.children.map(c=>{
+    const child=VAULT_FS[vJoin(dir,c)];
+    return dirPart + c + (child&&child.type==="dir"?"/":"");
+  });
+}
+// draw a monospaced flag box with a title, aligning borders regardless of color spans
+function flagBox(title,flag,tcls,fcls){
+  const W=47;
+  const row=(txt,cls)=>{
+    const t=" "+txt;
+    const padded=t+" ".repeat(Math.max(0,W-t.length));
+    const inner=cls?padded.replace(txt,`<span class="${cls}">${txt}</span>`):padded;
+    return `<span class="acc">│</span>${inner}<span class="acc">│</span>`;
+  };
+  return `<span class="acc">┌${"─".repeat(W)}┐</span>
+${row(title,tcls)}
+${row("")}
+${row(flag,fcls)}
+${row("")}
+<span class="acc">└${"─".repeat(W)}┘</span>`;
+}
 const VAULT_DISPATCH={
   help(){
+    // single column, padded on visible length so the descriptions always line up
+    const rows=[
+      ["ls [dir]","list a directory"],
+      ["cd <dir>","change directory"],
+      ["cat <file>","read a file"],
+      ["decode <algo>","base64 / sha1 / hex / rot13"],
+      ["gpg <args>","openpgp toolkit"],
+      ["tor","reach the hidden service"],
+      ["flag","the surface flag"],
+      ["msg","a note from y0uls"],
+      ["whoami","who am I now"],
+      ["clear","wipe screen"],
+      ["exit","log out of the vault"],
+    ];
+    const W=15;
+    const body=rows.map(([c,d])=>`  <span class="amb">${esc(c)}</span>${" ".repeat(Math.max(1,W-c.length))}${esc(d)}`).join("\n");
     out(
 `<span class="vio">vault shell</span> — you're root here.
-  <span class="amb">ls</span>               list vault files
-  <span class="amb">cat</span> &lt;file&gt;       read a file
-  <span class="amb">flag</span>             claim your prize
-  <span class="amb">msg</span>              a note from y0uls
-  <span class="amb">tor</span>              the hidden-service address
-  <span class="amb">whoami</span>           who am I now
-  <span class="amb">clear</span>            wipe screen
-  <span class="amb">exit</span>             log out of the vault`);
+${body}
+  <span class="dim">the surface flag isn't the end. read notes.md and look around.</span>`);
   },
-  ls(){
-    const names=Object.keys(VAULT_FILES);
-    out(names.map(n=>n.startsWith(".")?`<span class="dim">${n}</span>`:`<span class="acc">${n}</span>`).join("   "));
+  ls(args){
+    const target=vResolve(args[0]?args[0].replace(/\/$/,""):"");
+    const node=VAULT_FS[target];
+    if(!node||node.type!=="dir"){
+      if(VAULT_FILES[target]){ out(esc(args[0])); return; }   // ls on a file just echoes it
+      out(`ls: cannot access '${esc(args[0]||"")}': No such directory`,"red"); return;
+    }
+    const cells=node.children.map(c=>{
+      const child=VAULT_FS[vJoin(target,c)];
+      if(child&&child.type==="dir") return `<span class="cy">${c}/</span>`;
+      return c.startsWith(".")?`<span class="dim">${c}</span>`:`<span class="acc">${c}</span>`;
+    });
+    out(cells.join("   "));
+  },
+  cd(args){
+    if(!args[0]){ vcwd="/root"; return; }               // bare cd -> home
+    const dest=vResolve(args[0].replace(/\/$/,""));
+    if(VAULT_FS[dest]&&VAULT_FS[dest].type==="dir"){ vcwd=dest; }
+    else if(VAULT_FILES[dest]) out(`cd: not a directory: ${esc(args[0])}`,"red");
+    else out(`cd: no such file or directory: ${esc(args[0])}`,"red");
   },
   cat(args){
     if(!args[0]){out("cat: missing file","red");return;}
-    const k=args[0].replace(/^\.\//,"");
-    if(VAULT_FILES[k]){out(linkify(esc(VAULT_FILES[k])));return;}
+    const p=vResolve(args[0].replace(/\/$/,""));
+    if(VAULT_FS[p]&&VAULT_FS[p].type==="dir"){ out(`cat: ${esc(args[0])}: Is a directory <span class="dim">— try 'ls ${esc(args[0])}'</span>`,"red"); return; }
+    if(VAULT_FILES[p]){out(linkify(esc(VAULT_FILES[p])));return;}
     out(`cat: ${esc(args[0])}: No such file`,"red");
   },
   async flag(){
-    out("Verifying capture…","dim");
-    await sleep(600);
-    // box: padding is plain text OUTSIDE colored spans so borders stay aligned
-    const B='<span class="acc">│</span>';
+    out(`<span class="dim">surface flag:</span>  <span class="amb">${SURFACE_FLAG}</span>`);
+    await sleep(450);
     out(
-`<span class="acc">┌───────────────────────────────────────────────┐</span>
-${B} <span class="vio">CAPTURE THE FLAG — SOLVED</span>                    ${B}
-${B}                                               ${B}
-${B} <span class="amb">FLAG{y0u_r34d_b3tw33n_th3_l1n3s}</span>              ${B}
-${B}                                               ${B}
-<span class="acc">└───────────────────────────────────────────────┘</span>`);
-    await sleep(200);
-    out(
-`
-  You chained nmap → base64 → sha1 → ssh and made it in.
-  That's how real recon feels. Well played.
+`<span class="dim">don't get comfortable — this one was just sitting here for
+anyone who made it through the door. the flag that actually
+matters is sealed, and its key was never left lying around.
 
-  Want the source of this whole terminal? It's yours:
-  <a href="https://github.com/y0uls" target="_blank" rel="noopener">github.com/y0uls</a>
-
-  <span class="dim">psst — 'msg' has one more thing for you.</span>`,"acc");
-    // let the user read, then run the finale
-    await sleep(5000);
-    await finale();
+keep looking. 'ls', 'notes.md'.</span>`);
+  },
+  async gpg(args){
+    if(!args.length){ out("usage: gpg --decrypt flag.asc","dim"); return; }
+    const raw=args[args.length-1];
+    // resolve relative to cwd, but also find flag.asc wherever it lives (it's in /root)
+    let p=vResolve(raw.replace(/^\.\//,""));
+    if(!VAULT_FILES[p] && raw.split("/").pop()==="flag.asc") p="/root/flag.asc";
+    if(!VAULT_FILES[p]){
+      out(`gpg: can't open '${esc(raw)}': No such file`,"red");
+      out(`<span class="dim">the only encrypted thing in here is flag.asc (in /root)</span>`);
+      return;
+    }
+    out("gpg: AES256.OCB encrypted data","dim");
+    await sleep(280);
+    out("gpg: encrypted with 1 passphrase","dim");
+    await sleep(120);
+    passwordPrompt("Enter passphrase: ", async(pw)=>{
+      await sleep(500);
+      let pt=null;
+      try{ pt=await decryptDeep(pw); }catch(e){ pt=null; }
+      if(pt && pt.startsWith("FLAG{")){
+        out("gpg: <span class='acc'>good passphrase</span> — AES256, integrity OK","dim");
+        await sleep(400);
+        await challengeComplete(pt);
+        await finale(pt);
+      }else{
+        out("gpg: decryption failed: <span class='red'>Bad session key</span>","red");
+        out(`<span class="dim">wrong passphrase. vaultbot on the onion has the real one — run 'tor'.</span>`);
+      }
+    });
   },
   msg(){
     out(
@@ -617,12 +902,8 @@ you *explored* it. That curiosity is the whole point.
 Hit me up on GitHub. Bring your weirdest project idea.
                                             — y0uls`,"acc");
   },
-  tor(){
-    out(`<span class="vio">irc-improved</span> runs as a Tor hidden service.`);
-    out(`<span class="dim">The .onion address is ephemeral — it's regenerated on each deploy,`);
-    out(`<span class="dim">so it isn't hardcoded here. Build it yourself from the repo:</span>`);
-    out(`  <a href="https://github.com/y0uls/irc-improved" target="_blank" rel="noopener">github.com/y0uls/irc-improved</a>`);
-  },
+  async tor(){ await openTor(); },
+  decode(args){ decodeCmd(args); },
   whoami(){out("root <span class='dim'>— inside vault. you earned this.</span>");},
   clear(){doClear();},
   async exit(){
@@ -633,6 +914,331 @@ Hit me up on GitHub. Bring your weirdest project idea.
   },
   logout(){ return this.exit(); },
 };
+
+/* ---------- deep flag: real WebCrypto decrypt (gpg -c symmetric) ---------- */
+async function decryptDeep(pw){
+  const raw=Uint8Array.from(atob(DEEP_CT),c=>c.charCodeAt(0));
+  const salt=raw.slice(0,17), iv=raw.slice(17,29), ct=raw.slice(29);
+  const km=await crypto.subtle.importKey("raw",new TextEncoder().encode(pw),"PBKDF2",false,["deriveKey"]);
+  const key=await crypto.subtle.deriveKey(
+    {name:"PBKDF2",salt,iterations:100000,hash:"SHA-256"},
+    km,{name:"AES-GCM",length:256},false,["decrypt"]);
+  const pt=await crypto.subtle.decrypt({name:"AES-GCM",iv},key,ct);
+  return new TextDecoder().decode(pt);
+}
+
+/* ---------- tor browser + onion IRC hidden service ---------- */
+const torState={joined:false, proven:false, gaveKey:false};
+async function openTor(){
+  if(torActive) return;
+  torActive=true;
+  if(activeInput) freeze(activeInput.value);
+  suppressPrompt=true;
+
+  // 1. build a circuit in the terminal before the browser appears
+  out(`<span class="vio">tor</span>: bootstrapping onion router…`,"dim");
+  const hops=[
+    ["25%","connecting to guard relay","<b>gabelmoo</b> (DE)"],
+    ["50%","building circuit · relay 2/3","<b>tornado</b> (NL)"],
+    ["75%","building circuit · exit node","<b>hviikari</b> (IS)"],
+    ["100%","circuit established","3 hops · latency 214ms"]
+  ];
+  for(const [pct,msg,who] of hops){
+    await sleep(420);
+    out(`<span class="dim">[tor] ${pct.padEnd(5)} ${msg} — </span><span class="vio">${who}</span>`);
+  }
+  await sleep(350);
+  out(`<span class="dim">[tor] resolving ${esc(ONION_ADDR)} …</span>`);
+  await sleep(500);
+
+  const ts=document.getElementById('torScreen');
+  ts.innerHTML=
+`<div class="tor-tabs">
+   <div class="tor-tab active">
+     <span class="fav" id="torFav">🧅</span>
+     <span class="ttl" id="torTabTitle">irc-improved</span>
+     <span class="tclose" id="torTabClose" title="close tab">✕</span>
+   </div>
+   <button class="tor-tabadd" title="New tab">+</button>
+   <div class="tor-winctl"><span title="minimize">—</span><span title="maximize">▢</span><span class="wx" id="torWinX" title="close">✕</span></div>
+ </div>
+ <div class="tor-chrome">
+   <div class="tor-nav"><button title="Back">◀</button><button title="Forward">▶</button><button id="torReload" title="Reload">⟳</button></div>
+   <div class="tor-addr"><span class="oni-ico">🧅</span><span class="oni">${esc(ONION_ADDR)}</span><span class="circinfo" title="Tor circuit for this site">⛓ 3 relays</span></div>
+   <button class="tor-ico-btn" id="torNewId" title="New Tor circuit for this site">🧅</button>
+   <button class="tor-ico-btn" title="Security Level: Safer">🛡</button>
+   <button class="tor-ico-btn" title="Menu">☰</button>
+ </div>
+ <div class="tor-progress"><div class="bar" id="torProg"></div></div>
+ <div class="tor-circuit">Tor circuit for this site: <b>You</b> → <b>gabelmoo (DE)</b> → <b>tornado (NL)</b> → <b>hviikari (IS)</b> → <b>${esc(ONION_ADDR.slice(0,12))}…</b></div>
+ <div class="tor-body" id="torBody"></div>
+ <div class="tor-status" id="torStatus">&nbsp;</div>`;
+  ts.classList.add('show');
+  document.getElementById('torTabClose').addEventListener('click',closeTor);
+  document.getElementById('torWinX').addEventListener('click',closeTor);
+  document.getElementById('torReload').addEventListener('click',()=>{ if(!torLoading) loadPage(currentPage); });
+  document.getElementById('torNewId').addEventListener('click',()=>{ if(!torLoading){ setStatus("<span class='conn'>Requesting a new circuit for this site…</span>"); loadPage(currentPage); } });
+
+  loadPage(()=> torState.joined?renderChannel():renderGate());
+
+  // windowing: the terminal stays alive & draggable behind the browser
+  document.getElementById('crt').classList.add('draggable');
+  showTaskbar();
+  if(inputMode!=="password") newPrompt();   // give the terminal a live prompt to use
+  focusWindow('tor');                         // browser starts in front
+}
+function torBody(){ return document.getElementById('torBody'); }
+function setStatus(html){ const s=document.getElementById('torStatus'); if(s) s.innerHTML=html||"&nbsp;"; }
+// which render fn represents the "current page" (for reload / new identity)
+function currentPage(){ return torState.joined?renderChannel():renderGate(); }
+let torLoading=false;
+// simulate a real page load: spinning favicon, progress bar, connecting status, then content
+async function loadPage(renderFn){
+  const prog=document.getElementById('torProg');
+  const fav=document.getElementById('torFav');
+  const body=torBody();
+  if(!body){ renderFn&&renderFn(); return; }
+  torLoading=true;
+  if(fav){ fav.textContent="◌"; fav.classList.add('spin'); }
+  if(prog){ prog.style.transition="none"; prog.style.width="0%"; prog.style.opacity="1"; void prog.offsetWidth; prog.style.transition="width .3s ease,opacity .35s ease"; }
+  body.innerHTML=`<div class="tor-load"><div class="spinner"></div><div class="lmsg" id="torLoadMsg">Connecting through Tor…</div></div>`;
+  const steps=[
+    [12,"Contacting the Tor network…"],
+    [28,"Building a circuit to the hidden service…"],
+    [50,"Connecting to "+ONION_ADDR+"…"],
+    [74,"Waiting for "+ONION_ADDR+"…"],
+    [92,"Transferring data from "+ONION_ADDR+"…"]
+  ];
+  for(const [pct,msg] of steps){
+    await sleep(190+Math.floor(Math.random()*210));
+    if(prog) prog.style.width=pct+"%";
+    const m=document.getElementById('torLoadMsg'); if(m) m.textContent=msg;
+    setStatus("<span class='conn'>"+esc(msg)+"</span>");
+  }
+  await sleep(180);
+  renderFn&&renderFn();           // swaps the veil for the real page content
+  if(prog) prog.style.width="100%";
+  setStatus("");
+  await sleep(240);
+  if(prog) prog.style.opacity="0";
+  if(fav){ fav.textContent="🧅"; fav.classList.remove('spin'); }
+  torLoading=false;
+}
+function renderGate(){
+  const b=torBody(); if(!b) return;
+  b.innerHTML=
+`<div class="oni-wrap">
+   <div class="oni-head">
+     <h1>irc-improved</h1>
+     <div class="sub">private inspircd node · reachable only as a Tor hidden service</div>
+   </div>
+   <div class="oni-warn">⚠ This node does not federate and keeps no logs. Access is invite-only.
+     Casual visitors are dropped at the door.</div>
+   <div class="gate" id="gate">
+     <h2>join a channel</h2>
+     <p>Channel, and its invite key. If you belong here, you already have both.</p>
+     <div class="gate-col">
+       <input id="chanInput" placeholder="#channel" autocomplete="off" spellcheck="false"/>
+       <div class="gate-row">
+         <input id="inviteInput" placeholder="INV-XXXX-XXXX-XXXX" autocomplete="off" spellcheck="false"/>
+         <button id="inviteBtn">join</button>
+       </div>
+     </div>
+     <div class="err" id="inviteErr"></div>
+   </div>
+ </div>`;
+  const chanInp=b.querySelector('#chanInput');
+  const inp=b.querySelector('#inviteInput');
+  const fail=(msg)=>{
+    const g=b.querySelector('#gate'); const err=b.querySelector('#inviteErr');
+    g.classList.remove('shake'); void g.offsetWidth; g.classList.add('shake');
+    err.textContent=msg;
+  };
+  const submit=()=>{
+    const chan=(chanInp.value||"").trim().toLowerCase().replace(/^#+/,"");
+    const key=(inp.value||"").trim().toUpperCase();
+    if(!chan){ fail("which channel? name it — e.g. #something."); return; }
+    if(chan!==ONION_CHANNEL){ fail(`#${esc(chan)}: no such channel on this node.`); return; }   // don't leak the right one
+    if(key!==ONION_INVITE){ fail(key?"invalid invite key for that channel.":"this channel is invite-only. paste your key."); return; }
+    torState.joined=true; setStatus("<span class='conn'>invite accepted — joining #vault…</span>"); loadPage(renderChannel);
+  };
+  b.querySelector('#inviteBtn').addEventListener('click',submit);
+  chanInp.addEventListener('keydown',e=>{ if(e.key==="Enter"){ inp.value?submit():inp.focus(); } });
+  inp.addEventListener('keydown',e=>{ if(e.key==="Enter") submit(); });
+  setTimeout(()=>chanInp.focus(),50);
+}
+const ircLog=[];
+function renderChannel(){
+  const b=torBody(); if(!b) return;
+  const tt=document.getElementById('torTabTitle'); if(tt) tt.textContent="irc-improved — #vault";
+  b.innerHTML=
+`<div class="irc">
+   <div class="irc-main">
+     <div class="irc-topic">#vault · topic: <span class="amb">no names, no logs. prove you were inside — show me the vault's flag.</span></div>
+     <div class="irc-log" id="ircLog"></div>
+     <div class="irc-input"><span class="p">[#vault]</span><input id="ircInput" placeholder="type a message…  (try  !help )" autocomplete="off" spellcheck="false"/></div>
+   </div>
+   <div class="irc-users">
+     <h4>4 online</h4>
+     <div class="bot">@vaultbot</div>
+     <div class="me">y0uls_guest</div>
+     <div class="ghost">~gh0st</div>
+     <div class="ghost">~d34dl0ck</div>
+   </div>
+ </div>`;
+  if(!ircLog.length){
+    ircLog.push(["sys","* now talking in #vault"]);
+    ircLog.push(["bot","stranger in the channel. i don't hand secrets to just anyone."]);
+    ircLog.push(["bot","prove you were inside: paste the <span class='amb'>flag</span> you pulled out of the vault. only someone who got in can read it."]);
+  }
+  paintIrc();
+  const inp=b.querySelector('#ircInput');
+  inp.addEventListener('keydown',e=>{ if(e.key==="Enter"){ const v=inp.value; inp.value=""; ircSend(v); } });
+  setTimeout(()=>inp.focus(),50);
+}
+function paintIrc(){
+  const el=document.getElementById('ircLog'); if(!el) return;
+  el.innerHTML=ircLog.map(([who,txt])=>{
+    if(who==="sys") return `<div class="irc-msg sys">${txt}</div>`;
+    const n=who==="me"?"y0uls_guest":(who==="bot"?"@vaultbot":who);
+    return `<div class="irc-msg"><span class="nick ${who}">&lt;${n}&gt;</span> ${txt}</div>`;
+  }).join("");
+  el.scrollTop=el.scrollHeight;
+}
+async function botSay(txt,who){
+  ircLog.push([who||"bot",txt]); paintIrc();
+}
+const DOOR_Q="paste the FLAG{...} you pulled out of the vault. only someone inside can read it.";
+async function ircSend(raw){
+  const v=(raw||"").trim();
+  if(!v) return;
+  ircLog.push(["me",esc(v)]); paintIrc();
+  const low=v.toLowerCase();
+  await sleep(420);
+
+  // already earned it
+  if(torState.gaveKey){
+    await botSay("you already have the passphrase. go: <span class='amb'>gpg --decrypt flag.asc</span> back on the box.");
+    return;
+  }
+  if(low==="!help"||low==="/help"||low==="help"){
+    await botSay(`no small talk. just prove it: <span class='amb'>${DOOR_Q}</span>`);
+    return;
+  }
+
+  // pull a FLAG{...} out of the message (tolerate a '!flag' prefix or extra words)
+  const m=v.match(/FLAG\{[^}]*\}/i);
+  const given=m?m[0]:v.replace(/^!?flag\s*/i,"").trim();
+  if(given.toUpperCase()===SURFACE_FLAG.toUpperCase()){
+    torState.proven=true; torState.gaveKey=true;
+    await botSay("<span class='amb'>…read between the lines</span>. heh — and you did. that string only prints inside the vault, so you were really there.");
+    await sleep(600);
+    await botSay(`here — passphrase for <span class='amb'>flag.asc</span> → <span class='amb'>${DEEP_PASS}</span>`);
+    await sleep(450);
+    await botSay("now get off my channel and go decrypt it: <span class='amb'>gpg --decrypt flag.asc</span> back on the box.");
+    return;
+  }
+
+  // wrong — escalate from terse to explicit
+  ircWrong++;
+  if(/FLAG\{/i.test(v)){
+    await botSay("that's not the vault's flag. nice try — i already know that one.");
+  }else if(ircWrong>=3){
+    await botSay("last time: inside the vault, one command prints a <span class='amb'>FLAG{...}</span>. run <span class='amb'>flag</span> in there, copy the whole thing, paste it here.");
+  }else if(ircWrong===2){
+    await botSay("no. i want the <span class='amb'>FLAG{...}</span> you read <em>inside</em> the vault — not chatter.");
+  }else{
+    await botSay(`not it. <span class='amb'>${DOOR_Q}</span>`);
+  }
+}
+async function closeTor(){
+  const ts=document.getElementById('torScreen');
+  ts.classList.remove('show');
+  hideTaskbar();
+  await sleep(450);
+  ts.innerHTML="";
+  torActive=false;
+  winFront='term';
+  document.getElementById('crt').classList.remove('draggable');
+  recenterTerminal();                 // put the terminal back in the centre, reset z-index
+  out(`<span class="dim">[tor] circuit closed — back to the vault shell.</span>`);
+  if(torState.gaveKey) out(`<span class="dim">you have the passphrase. now: <span class="amb">gpg --decrypt flag.asc</span></span>`);
+  if(!activeInput) newPrompt(); else activeInput.focus();
+}
+
+/* ---------- lightweight window manager: terminal <-> tor browser ---------- */
+let winFront='term';
+function focusWindow(w){
+  winFront=w;
+  const crt=document.getElementById('crt');
+  const ts=document.getElementById('torScreen');
+  if(w==='term'){ crt.style.zIndex='60'; if(ts) ts.style.zIndex='50'; if(activeInput) activeInput.focus(); }
+  else { crt.style.zIndex='40'; if(ts) ts.style.zIndex='50'; const ti=ts&&ts.querySelector('input'); if(ti) ti.focus(); }
+  updateTaskbar();
+}
+function updateTaskbar(){
+  const tb=document.getElementById('taskbar');
+  if(!tb) return;
+  tb.querySelectorAll('button').forEach(b=>b.classList.toggle('active', b.dataset.win===winFront));
+}
+function showTaskbar(){
+  const tb=document.getElementById('taskbar');
+  tb.innerHTML=
+`<button data-win="term"><span class="ic">🖥️</span> Terminal</button>
+ <button data-win="tor"><span class="ic">🧅</span> irc-improved</button>`;
+  tb.querySelector('[data-win="term"]').addEventListener('click',()=>focusWindow('term'));
+  tb.querySelector('[data-win="tor"]').addEventListener('click',()=>focusWindow('tor'));
+  tb.classList.add('show');
+  updateTaskbar();
+}
+function hideTaskbar(){ const tb=document.getElementById('taskbar'); if(tb){ tb.classList.remove('show'); tb.innerHTML=''; } }
+function recenterTerminal(){
+  const crt=document.getElementById('crt');
+  crt.style.zIndex='';                       // back to CSS default
+  if(!crt.classList.contains('floating')) return;
+  const r=crt.getBoundingClientRect();
+  const cx=Math.round((window.innerWidth-r.width)/2);
+  const cy=Math.round((window.innerHeight-r.height)/2);
+  crt.style.transition='left .4s ease, top .4s ease';
+  crt.style.left=cx+'px'; crt.style.top=cy+'px';
+  setTimeout(()=>{ crt.classList.remove('floating'); crt.style.left=''; crt.style.top=''; crt.style.transition=''; },430);
+}
+// silent teardown (used by the finale, which reboots the whole shell)
+function teardownTor(){
+  const ts=document.getElementById('torScreen');
+  if(ts){ ts.classList.remove('show'); ts.innerHTML=''; }
+  torActive=false; winFront='term'; hideTaskbar();
+  const crt=document.getElementById('crt');
+  crt.classList.remove('floating','draggable');
+  crt.style.left=''; crt.style.top=''; crt.style.zIndex=''; crt.style.transition='';
+}
+function initTerminalWindow(){
+  const crt=document.getElementById('crt');
+  const bar=crt.querySelector('.bar');
+  let dragging=false,sx=0,sy=0,ox=0,oy=0;
+  bar.addEventListener('mousedown',(e)=>{
+    if(!torActive) return;                 // draggable only while the tor browser is open
+    if(e.target.closest('.dot')) return;   // let the titlebar dots do their own thing
+    dragging=true; focusWindow('term');
+    const r=crt.getBoundingClientRect();
+    crt.classList.add('floating');
+    crt.style.transition=''; crt.style.left=r.left+'px'; crt.style.top=r.top+'px';
+    sx=e.clientX; sy=e.clientY; ox=r.left; oy=r.top;
+    e.preventDefault();
+  });
+  window.addEventListener('mousemove',(e)=>{
+    if(!dragging) return;
+    const r=crt.getBoundingClientRect();
+    let nx=ox+(e.clientX-sx), ny=oy+(e.clientY-sy);
+    nx=Math.max(120-r.width, Math.min(nx, window.innerWidth-120));  // keep a grabbable strip on-screen
+    ny=Math.max(0, Math.min(ny, window.innerHeight-38));
+    crt.style.left=nx+'px'; crt.style.top=ny+'px';
+  });
+  window.addEventListener('mouseup',()=>{ dragging=false; });
+  // click either window to bring it to the front (desktop-style)
+  crt.addEventListener('mousedown',()=>{ if(torActive && winFront!=='term') focusWindow('term'); });
+  document.getElementById('torScreen').addEventListener('mousedown',()=>{ if(torActive && winFront!=='tor') focusWindow('tor'); });
+}
 
 /* ---------- path utils ---------- */
 function joinPath(base,seg){
@@ -742,15 +1348,14 @@ async function ssh(args){
   const host=hasUser?target.split("@")[1]:target;
 
   if(host==="vault"){
-    if(!hasUser){
-      // ssh vault -> would try to log in as the current user, which vault rejects
-      out(`y0uls@vault: Permission denied (publickey,password).`,"red");
-      out(`<span class="dim">vault doesn't know a user 'y0uls'. which account did nmap say to use? try 'root@vault'.</span>`);
-      return;
-    }
-    if(user!=="root"){
-      out(`${esc(user)}@vault: Permission denied (publickey,password).`,"red");
-      out(`<span class="dim">no such user on vault. nmap reported the right login — recheck it.</span>`);
+    if(!hasUser || user!=="root"){
+      // wrong (or missing) user -> progressive nudges toward 'root', never handed on the first try
+      sshVaultTries++;
+      const who=hasUser?esc(user):"y0uls";
+      out(`${who}@vault: Permission denied (publickey,password).`,"red");
+      if(sshVaultTries===1) out(`<span class="dim">vault won't open for you. it trusts exactly one account — the one that owns the whole box.</span>`);
+      else if(sshVaultTries===2) out(`<span class="dim">think higher. the superuser — the account that sits at the very top of a unix system.</span>`);
+      else out(`<span class="dim">fine — it's <span class="amb">root</span>. try <span class="amb">ssh root@vault</span>.</span>`);
       return;
     }
     // correct: root@vault -> real masked password prompt, verified with SubtleCrypto
@@ -786,22 +1391,62 @@ async function vaultLogin(){
   Welcome to <span class="vio">vault</span> — the hidden service behind 'irc-improved'.
   Not everything worth building has a public port.
 
-  New commands unlocked: <span class="amb">ls</span>  <span class="amb">cat</span>  <span class="amb">flag</span>  <span class="amb">msg</span>  <span class="amb">tor</span>  <span class="amb">exit</span>
-  Type <span class="amb">help</span> to see them. Type <span class="amb">flag</span> when you're ready for the prize.`,"acc");
+  New commands unlocked: <span class="amb">flag</span>  <span class="amb">gpg</span>  <span class="amb">msg</span>  <span class="amb">tor</span>
+  Type <span class="amb">help</span> to see everything. Type <span class="amb">flag</span> when you're ready for the prize.`,"acc");
+  vcwd="/root";
   vaultMode=true;
 }
 
 let finaleRunning=false;
-async function finale(){
+// an elegant, earned completion screen — plays before the vault seals itself up
+async function challengeComplete(flag){
+  const W=48;
+  const rule=`  <span class="dim">${"─".repeat(W)}</span>`;
+  const center=(t,cls)=>`  ${" ".repeat(Math.max(0,Math.floor((W-t.length)/2)))}<span class="${cls}">${esc(t)}</span>`;
+  await sleep(250);
+  out(flagBox("DEEP FLAG — DECRYPTED",flag,"acc","amb"));
+  await sleep(600);
+  out(`  <span class="vio">you peeled every layer by hand:</span>`);
+  const layers=[
+    ["recon",      "nmap surfaced a service that shouldn't answer"],
+    ["the door",   "base64 → sha1 → root's password"],
+    ["the vault",  "you read root's own shell history"],
+    ["the darknet","a Tor circuit to an invite-only channel"],
+    ["the doorman","you named the hash that sealed the door"],
+    ["the seal",   "gpg — you decrypted the last layer yourself"],
+  ];
+  for(const [k,d] of layers){
+    await sleep(440);
+    out(`    <span class="acc">✓</span>  <span class="amb">${esc(k).padEnd(12)}</span><span class="dim">${esc(d)}</span>`);
+  }
+  await sleep(800);
+  out("");
+  out(rule);
+  out(center("✦  CHALLENGE COMPLETE  ✦","vio"));
+  out(rule);
+  await sleep(700);
+  out(
+`
+  <span class="vio">// y0uls</span>
+  six layers down, and you never once had to guess. that's the
+  difference between poking at something and understanding it.
+
+  thanks for going all the way to the bottom. i'll tidy up now.`,"acc");
+  await sleep(2800);
+}
+
+async function finale(deepFlag){
   if(finaleRunning) return;
   finaleRunning=true;
+  if(torActive) teardownTor();          // if the browser was still open, dismiss it before the reboot
+  const flag=deepFlag||SURFACE_FLAG;
   const crt=document.getElementById('crt');
   const wo=document.getElementById('whiteout');
 
-  // 1. connection destabilizes
-  out(`<span class="glitch-txt">[!] connection to vault unstable — kernel trap 0x0d</span>`);
-  await sleep(400);
-  out(`<span class="glitch-txt">[!] memory corruption detected in /dev/vault</span>`);
+  // 1. the vault seals itself back up — deliberate, not a crash
+  out(`<span class="glitch-txt">[vault] prize claimed — scrubbing keys, pulling the circuit…</span>`);
+  await sleep(450);
+  out(`<span class="glitch-txt">[vault] sealing the hidden service back up…</span>`);
   await sleep(400);
 
   // 2. hard glitch shake starts
@@ -837,8 +1482,9 @@ async function finale(){
 
   out(`Connection to vault closed.`,"dim");
   await sleep(300);
-  out(`<span class="dim">…that was fun. the flag's yours to keep: <span class="amb">FLAG{y0u_r34d_b3tw33n_th3_l1n3s}</span></span>`);
-  out(`<span class="dim">everything you saw is real code — <a href="https://github.com/y0uls" target="_blank" rel="noopener">github.com/y0uls</a></span>`);
+  out(`<span class="dim">…that was fun. the deepest flag is yours to keep: <span class="amb">${esc(flag)}</span></span>`);
+  out(`<span class="dim">two layers, one real onion route, real AES on that last file — all of it is real code:</span>`);
+  out(`<span class="dim"><a href="https://github.com/y0uls" target="_blank" rel="noopener">github.com/y0uls</a></span>`);
 
   // 8. leave it up for 10s, then reboot the whole thing as if the page reloaded
   await sleep(10000);
@@ -859,6 +1505,10 @@ async function fullReboot(){
   cwd="~/home";
   history.length=0;
   hIndex=0;
+  // re-arm the puzzle for a fresh playthrough
+  sshVaultTries=0; ircWrong=0; vcwd="/root";
+  torState.joined=false; torState.proven=false; torState.gaveKey=false;
+  ircLog.length=0;
   screen.innerHTML="";
   await boot();
 }
@@ -1070,7 +1720,8 @@ screen.addEventListener('click',()=>{
 // In the normal shell -> slide the window away and reveal the portfolio (no boot).
 document.getElementById('btnClose').addEventListener('click',(e)=>{
   e.stopPropagation();
-  if(guiActive){ exitGui(); }
+  if(torActive){ focusWindow('term'); }   // browser has its own close; keep the terminal alive
+  else if(guiActive){ exitGui(); }
   else if(!vaultMode){ closeTerminal(); }
 });
 
@@ -1101,6 +1752,7 @@ screen.addEventListener('contextmenu', async (e)=>{
   el.setSelectionRange(pos,pos);
 });
 
+initTerminalWindow();
 boot();
 </script>
 </body>
