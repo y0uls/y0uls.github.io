@@ -352,7 +352,7 @@ const FS = {
   "~/home": {type:"dir", children:["projects","stack","about.txt","contact.txt"]},
   "~/home/projects": {type:"dir", children:[
     "irc-improved","qr-manager","space-warfare","esp8266-wifi","duke-launcher",
-    "kbm-to-xinput","debianwsl-xmrig","portfolio"
+    "kbm-to-xinput","debianwsl-xmrig","screenshare-lan","portfolio"
   ]},
   "~/home/stack": {type:"dir", children:["languages.md","interests.md","tooling.md"]},
 };
@@ -412,6 +412,9 @@ Xbox 360 controller (XInput) from keyboard and mouse input.
 `DebianWSL-XMRig — PowerShell that auto-installs and configures
 Debian under WSL together with XMRig.
   github.com/y0uls/DebianWSL-XMRig`},
+  "screenshare-lan":{port:"n/a", svc:"provisioning", lang:"PowerShell", repo:"ScreenShare-LAN", desc:
+`Internal remote support tool: view the screen of a Windows workstation on your local network from a standard web browser, without installing anything on the target machine.
+  github.com/y0uls/ScreenShare-LAN`},
   "portfolio":{port:"443/tcp", svc:"github-pages", lang:"HTML", repo:"y0uls.github.io", desc:
 `y0uls.github.io — my personal site: terminal/hacker aesthetic,
 matrix rain, Konami code, nmap-style project cards. This shell
